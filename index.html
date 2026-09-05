@@ -17,7 +17,7 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
 .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:20px}.stat label{font-size:12px;color:var(--muted)}.stat h2{margin:9px 0 4px;font-size:25px}.green{color:var(--green)}.red{color:var(--red)}.blue{color:var(--blue)}.purple{color:var(--purple)}
 .content{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.card h3{font-size:15px;margin:0 0 17px}.donutrow{display:flex;align-items:center;gap:28px}.donut{width:170px;height:170px;border-radius:50%;background:conic-gradient(var(--blue) 0 40%,var(--pink) 40% 75%,var(--green) 75% 100%);position:relative;flex-shrink:0}.donut:after{content:"";position:absolute;inset:35px;background:white;border-radius:50%}.legend{display:grid;gap:14px;font-size:13px}.bar{height:8px;background:#eef1f6;border-radius:99px;margin-top:8px;overflow:hidden}.fill{height:100%;border-radius:99px}
 .balance{display:grid;gap:18px}.person{display:grid;grid-template-columns:42px 1fr auto;gap:12px;align-items:center}.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:800}.avb{background:#edf3ff;color:var(--blue)}.avp{background:#fff0f5;color:var(--pink)}.person strong{display:block;font-size:14px}.person small{color:var(--muted)}.amount{font-weight:800}.tablewrap{overflow:auto}.full{margin-top:16px}.toolbar{display:flex;justify-content:space-between;gap:10px;margin-bottom:12px}.toolbar input{flex:1;border:1px solid var(--line);border-radius:9px;padding:10px 12px;outline:none}table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:12px 8px;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--muted);font-weight:600}.tag{padding:4px 8px;border-radius:99px;font-size:11px}.shared{background:#f1edff;color:var(--purple)}.personal{background:#edf3ff;color:var(--blue)}.income{background:#eaf9f1;color:#2e9d68}.actions button{background:transparent;color:#9aa2b3;padding:4px;cursor:pointer}.actions button:hover{color:var(--blue)}.modal{position:fixed;inset:0;background:rgba(22,28,44,.35);display:none;align-items:center;justify-content:center;padding:20px}.modal.show{display:flex}.modalbox{background:white;border-radius:16px;width:min(520px,100%);padding:24px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:6px}.field.fullw{grid-column:1/-1}.field label{font-size:12px;color:var(--muted)}.field input,.field select{padding:11px;border:1px solid var(--line);border-radius:9px;outline:none}.modalactions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
-.summarygrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.miniTable{width:100%}.miniTable td:last-child,.miniTable th:last-child{text-align:right}
+.summarygrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .tab-pane{display:none}.tab-pane.active{display:block}
 @media(max-width:1000px){.app{grid-template-columns:1fr}.side{display:none}.main{padding:18px}.grid4{grid-template-columns:1fr 1fr}.content,.summarygrid{grid-template-columns:1fr}}
 @media(max-width:560px){.grid4{grid-template-columns:1fr}.top{align-items:flex-start;gap:12px;flex-direction:column}.controls{width:100%}.controls>*{flex:1}.formgrid{grid-template-columns:1fr}.field.fullw{grid-column:auto}}
@@ -70,46 +70,73 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
       </div>
     </section>
 
-    <!-- สรุปภาพรวมยอดสุทธิรายบุคคล และข้อมูลเดิมแบบแยกซ้าย-ขวา -->
+    <!-- สรุปภาพรวมยอดสุทธิรายบุคคล (รวมรายละเอียดทั้งหมดไว้ในช่องเดียว) -->
     <section class="card full">
       <h3>สรุปภาพรวมยอดสุทธิรายบุคคล</h3>
       <div class="summarygrid" style="margin-bottom:24px">
-        <div class="card" style="background:#f8f9fe; border:1px solid var(--line); border-radius:12px; padding:16px;">
-          <h4 style="margin:0 0 10px 0; color:var(--blue); font-size:16px;">👤 แก๊ป</h4>
-          <div style="display:grid; gap:8px; font-size:13px;">
-            <div style="display:flex; justify-content:space-between;"><span>รายรับรวม:</span><b class="green" id="summaryGapInc">฿0</b></div>
-            <div style="display:flex; justify-content:space-between;"><span>รายจ่ายรวม (ส่วนตัว + ส่วนรวมที่จ่าย):</span><b class="red" id="summaryGapExp">฿0</b></div>
-            <hr style="border:0; border-top:1px solid var(--line); margin:4px 0;">
-            <div style="display:flex; justify-content:space-between; font-size:15px;"><span><b>คงเหลือสุทธิ (แก๊ป):</b></span><b id="summaryGapNet" class="blue">฿0</b></div>
+        <div class="card" style="background:#f8f9fe; border:1px solid var(--line); border-radius:12px; padding:18px;">
+          <h4 style="margin:0 0 14px 0; color:var(--blue); font-size:16px;">👤 แก๊ป</h4>
+          <div style="display:grid; gap:10px; font-size:13px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; padding:8px 12px; border-radius:8px; border:1px solid #eef2f9;">
+              <span style="color:var(--muted)">รายรับ:</span>
+              <b class="green" id="summaryGapInc">฿0</b>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; padding:8px 12px; border-radius:8px; border:1px solid #eef2f9;">
+              <span style="color:var(--muted)">รายจ่ายส่วนตัว:</span>
+              <b style="color:var(--blue)" id="dashGapPersonalExp">฿0</b>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; padding:8px 12px; border-radius:8px; border:1px solid #eef2f9;">
+              <span style="color:var(--muted)">รายจ่ายส่วนรวม:</span>
+              <b style="color:var(--purple)" id="dashGapSharedExp">฿0</b>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#f0f4ff; padding:8px 12px; border-radius:8px; border:1px solid #d9e4ff;">
+              <span><b>รายจ่ายรวมทั้งหมด:</b></span>
+              <b class="red" id="summaryGapExp">฿0</b>
+            </div>
+            <hr style="border:0; border-top:1px solid var(--line); margin:2px 0;">
+            <div style="display:flex; justify-content:space-between; align-items:center; font-size:15px; padding:4px 0;">
+              <span><b>คงเหลือสุทธิ (แก๊ป):</b></span>
+              <b id="summaryGapNet" class="blue">฿0</b>
+            </div>
           </div>
         </div>
-        <div class="card" style="background:#fff9fb; border:1px solid var(--line); border-radius:12px; padding:16px;">
-          <h4 style="margin:0 0 10px 0; color:var(--pink); font-size:16px;">👤 แอม</h4>
-          <div style="display:grid; gap:8px; font-size:13px;">
-            <div style="display:flex; justify-content:space-between;"><span>รายรับรวม:</span><b class="green" id="summaryAmpInc">฿0</b></div>
-            <div style="display:flex; justify-content:space-between;"><span>รายจ่ายรวม (ส่วนตัว + ส่วนรวมที่จ่าย):</span><b class="red" id="summaryAmpExp">฿0</b></div>
-            <hr style="border:0; border-top:1px solid var(--line); margin:4px 0;">
-            <div style="display:flex; justify-content:space-between; font-size:15px;"><span><b>คงเหลือสุทธิ (แอม):</b></span><b id="summaryAmpNet" class="blue">฿0</b></div>
+
+        <div class="card" style="background:#fff9fb; border:1px solid var(--line); border-radius:12px; padding:18px;">
+          <h4 style="margin:0 0 14px 0; color:var(--pink); font-size:16px;">👤 แอม</h4>
+          <div style="display:grid; gap:10px; font-size:13px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; padding:8px 12px; border-radius:8px; border:1px solid #fce8f0;">
+              <span style="color:var(--muted)">รายรับ:</span>
+              <b class="green" id="summaryAmpInc">฿0</b>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; padding:8px 12px; border-radius:8px; border:1px solid #fce8f0;">
+              <span style="color:var(--muted)">รายจ่ายส่วนตัว:</span>
+              <b style="color:var(--blue)" id="dashAmpPersonalExp">฿0</b>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; padding:8px 12px; border-radius:8px; border:1px solid #fce8f0;">
+              <span style="color:var(--muted)">รายจ่ายส่วนรวม:</span>
+              <b style="color:var(--purple)" id="dashAmpSharedExp">฿0</b>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#fff0f5; padding:8px 12px; border-radius:8px; border:1px solid #fbcfe8;">
+              <span><b>รายจ่ายรวมทั้งหมด:</b></span>
+              <b class="red" id="summaryAmpExp">฿0</b>
+            </div>
+            <hr style="border:0; border-top:1px solid var(--line); margin:2px 0;">
+            <div style="display:flex; justify-content:space-between; align-items:center; font-size:15px; padding:4px 0;">
+              <span><b>คงเหลือสุทธิ (แอม):</b></span>
+              <b id="summaryAmpNet" class="blue">฿0</b>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- นำข้อมูลยอดแต่ละคนเดิมมาใส่แบบแบ่งซ้ายขวา -->
+      <!-- ตารางแสดงรายการแยกฝั่งซ้าย-ขวา (อ้างอิงจากข้อมูลเดิม) -->
       <div class="summarygrid">
         <section class="card" style="background:#f8f9fe; border:1px solid var(--line);">
-          <h3>ยอดทั้งหมดของ แก๊ป</h3>
-          <div style="margin:10px 0; font-size:13px; color:var(--muted); display:grid; gap:4px;">
-            <div>• รายจ่ายส่วนตัว: <b id="dashGapPersonalExp" style="color:var(--text)">฿0</b></div>
-            <div>• รายจ่ายส่วนรวม (ที่ออก): <b id="dashGapSharedExp" style="color:var(--text)">฿0</b></div>
-          </div>
+          <h3>รายการทั้งหมดของ แก๊ป</h3>
           <div class="tablewrap"><table><thead><tr><th>วันที่</th><th>รายการ</th><th>ประเภท</th><th>หมวด</th><th>ลักษณะ</th><th>จำนวน</th></tr></thead><tbody id="dashGapTable"></tbody></table></div>
         </section>
         <section class="card" style="background:#fff9fb; border:1px solid var(--line);">
-          <h3>ยอดทั้งหมดของ แอม</h3>
-          <div style="margin:10px 0; font-size:13px; color:var(--muted); display:grid; gap:4px;">
-            <div>• รายจ่ายส่วนตัว: <b id="dashAmpPersonalExp" style="color:var(--text)">฿0</b></div>
-            <div>• รายจ่ายส่วนรวม (ที่ออก): <b id="dashAmpSharedExp" style="color:var(--text)">฿0</b></div>
-          </div>
+          <h3>รายการทั้งหมดของ แอม</h3>
           <div class="tablewrap"><table><thead><tr><th>วันที่</th><th>รายการ</th><th>ประเภท</th><th>หมวด</th><th>ลักษณะ</th><th>จำนวน</th></tr></thead><tbody id="dashAmpTable"></tbody></table></div>
         </section>
       </div>
@@ -127,7 +154,7 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
         </div>
         <div class="card" style="background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px;">
           <h4 style="margin:0 0 10px 0; color:var(--pink);">🩷 ส่วนรวมฝั่งแอม</h4>
-          <div class="tablewrap"><table><thead><tr><th>วันที่</th><th>รายการ</th><th>หมวด</th><th>จำนวน</th></tr></thead><tbody id="sharedAmpTable"></tbody></table></div>
+          <div class="tablewrap"><thead><tr><th>วันที่</th><th>รายการ</th><th>หมวด</th><th>จำนวน</th></tr></thead><tbody id="sharedAmpTable"></tbody></table></div>
         </div>
       </div>
     </section>
@@ -256,7 +283,7 @@ function render(){
  
  balance.innerHTML = personCard('แก๊ป', a, gapP, 'avb') + personCard('แอม', b, ampP, 'avp');
 
- // คำนวณข้อมูลรายบุคคลและแสดงตารางข้อมูลเดิมแยกฝั่งซ้าย-ขวาที่ Dashboard
+ // คำนวณข้อมูลรายบุคคลและแสดงในกล่องสรุปภาพรวม
  let gapData = data.filter(x => x.payer === 'แก๊ป');
  let ampData = data.filter(x => x.payer === 'แอม');
  let gInc = gapData.filter(x => x.type === 'income').reduce((s, x) => s + x.amount, 0);
@@ -291,17 +318,17 @@ function render(){
  dashGapTable.innerHTML = gapData.sort((a, b) => b.date.localeCompare(a.date)).map(x => `<tr><td>${formatDate(x.date)}</td><td><b>${x.title}</b></td><td><span class="tag ${x.type === 'income' ? 'income' : 'personal'}">${x.type === 'income' ? 'รายรับ' : 'รายจ่าย'}</span></td><td>${x.category}</td><td>${x.scope === 'shared' ? 'ส่วนรวม' : 'ส่วนตัว'}</td><td class="${x.type === 'income' ? 'green' : 'red'}">${x.type === 'income' ? '+' : '-'}${money(x.amount)}</td></tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">ไม่มีรายการ</td></tr>';
  dashAmpTable.innerHTML = ampData.sort((a, b) => b.date.localeCompare(a.date)).map(x => `<tr><td>${formatDate(x.date)}</td><td><b>${x.title}</b></td><td><span class="tag ${x.type === 'income' ? 'income' : 'personal'}">${x.type === 'income' ? 'รายรับ' : 'รายจ่าย'}</span></td><td>${x.category}</td><td>${x.scope === 'shared' ? 'ส่วนรวม' : 'ส่วนตัว'}</td><td class="${x.type === 'income' ? 'green' : 'red'}">${x.type === 'income' ? '+' : '-'}${money(x.amount)}</td></tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">ไม่มีรายการ</td></tr>';
 
- // Shared Tab Tables (แบ่ง 2 ฝั่ง ซ้าย-ขวา)
+ // Shared Tab Tables
  let sharedRows = data.filter(x => x.scope === 'shared').sort((a, b) => b.date.localeCompare(a.date));
  sharedGapTable.innerHTML = sharedRows.filter(x => x.payer === 'แก๊ป').map(x => `<tr><td>${formatDate(x.date)}</td><td><b>${x.title}</b></td><td>${x.category}</td><td class="${x.type === 'income' ? 'green' : 'red'}"><b>${money(x.amount)}</b></td></tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--muted)">ไม่มีรายการ</td></tr>';
  sharedAmpTable.innerHTML = sharedRows.filter(x => x.payer === 'แอม').map(x => `<tr><td>${formatDate(x.date)}</td><td><b>${x.title}</b></td><td>${x.category}</td><td class="${x.type === 'income' ? 'green' : 'red'}"><b>${money(x.amount)}</b></td></tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--muted)">ไม่มีรายการ</td></tr>';
 
- // Personal Tab Tables (แบ่ง 2 ฝั่ง ซ้าย-ขวา)
+ // Personal Tab Tables
  let personalRows = data.filter(x => x.scope === 'personal').sort((a, b) => b.date.localeCompare(a.date));
  personalGapTable.innerHTML = personalRows.filter(x => x.payer === 'แก๊ป').map(x => `<tr><td>${formatDate(x.date)}</td><td><b>${x.title}</b></td><td><span class="tag personal">${x.type === 'income' ? 'รายรับ' : 'รายจ่าย'}</span></td><td>${x.category}</td><td class="${x.type === 'income' ? 'green' : 'red'}"><b>${money(x.amount)}</b></td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--muted)">ไม่มีรายการ</td></tr>';
  personalAmpTable.innerHTML = personalRows.filter(x => x.payer === 'แอม').map(x => `<tr><td>${formatDate(x.date)}</td><td><b>${x.title}</b></td><td><span class="tag personal">${x.type === 'income' ? 'รายรับ' : 'รายจ่าย'}</span></td><td>${x.category}</td><td class="${x.type === 'income' ? 'green' : 'red'}"><b>${money(x.amount)}</b></td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--muted)">ไม่มีรายการ</td></tr>';
 
- // All Transactions Tables (แบ่ง 2 ฝั่ง ซ้าย-ขวา)
+ // All Transactions Tables
  let allFiltered = data.filter(x => [x.title, x.category, x.payer, x.scope].join(' ').toLowerCase().includes(q)).sort((a, b) => b.date.localeCompare(a.date));
  allGapTable.innerHTML = allFiltered.filter(x => x.payer === 'แก๊ป').map(x => `<tr><td>${formatDate(x.date)}</td><td><b>${x.title}</b></td><td><span class="tag ${x.type === 'income' ? 'income' : x.scope === 'shared' ? 'shared' : 'personal'}">${x.type === 'income' ? 'รายรับ' : x.scope === 'shared' ? 'ส่วนรวม' : 'ส่วนตัว'}</span></td><td>${x.category}</td><td class="${x.type === 'income' ? 'green' : 'red'}"><b>${money(x.amount)}</b></td><td class="actions"><button onclick="editTx(${x.id})">แก้ไข</button> <button onclick="delTx(${x.id})">ลบ</button></td></tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted)">ไม่มีรายการ</td></tr>';
  allAmpTable.innerHTML = allFiltered.filter(x => x.payer === 'แอม').map(x => `<tr><td>${formatDate(x.date)}</td><td><b>${x.title}</b></td><td><span class="tag ${x.type === 'income' ? 'income' : x.scope === 'shared' ? 'shared' : 'personal'}">${x.type === 'income' ? 'รายรับ' : x.scope === 'shared' ? 'ส่วนรวม' : 'ส่วนตัว'}</span></td><td>${x.category}</td><td class="${x.type === 'income' ? 'green' : 'red'}"><b>${money(x.amount)}</b></td><td class="actions"><button onclick="editTx(${x.id})">แก้ไข</button> <button onclick="delTx(${x.id})">ลบ</button></td></tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted)">ไม่มีรายการ</td></tr>';
