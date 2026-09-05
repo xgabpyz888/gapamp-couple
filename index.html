@@ -39,7 +39,12 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
 <main class="main">
   <div class="top">
     <div><h1 id="pageTitle">Dashboard</h1><div class="sub" id="pageSub">ภาพรวมรายรับ-รายจ่ายทั้งหมด</div></div>
-    <div class="controls"><button class="btn" onclick="changeMonth(-1)">‹</button><input id="month" class="select" type="month"><button class="btn" onclick="changeMonth(1)">›</button><button class="btn primary" onclick="exportCSV()">↓ ส่งออก CSV</button></div>
+    <div class="controls">
+      <button type="button" class="btn" onclick="changeMonth(-1)">‹</button>
+      <input id="month" class="select" type="month">
+      <button type="button" class="btn" onclick="changeMonth(1)">›</button>
+      <button type="button" class="btn primary" onclick="exportCSV()">↓ ส่งออก CSV</button>
+    </div>
   </div>
 
   <div id="tab-dashboard" class="tab-pane active">
@@ -371,9 +376,13 @@ async function delTx(id){
 }
 
 function changeMonth(d){
-  let [y, m] = monthEl.value.split('-').map(Number);
+  let val = monthEl.value;
+  if(!val) return;
+  let [y, m] = val.split('-').map(Number);
   let dt = new Date(y, m - 1 + d, 1);
-  monthEl.value = dt.toISOString().slice(0, 7);
+  let ny = dt.getFullYear();
+  let nm = String(dt.getMonth() + 1).padStart(2, '0');
+  monthEl.value = `${ny}-${nm}`;
   render();
 }
 
