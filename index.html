@@ -50,7 +50,7 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
       <div class="card stat"><label>บันทึกรายการ</label><h2 class="purple" id="txCount">0</h2><small>รายการในเดือนนี้</small></div>
     </section>
 
-    <!-- กราฟและสัดส่วนเฉพาะส่วนรวม (ตามข้อ 1 และ 2) -->
+    <!-- กราฟและสัดส่วนเฉพาะส่วนรวม -->
     <section class="content">
       <div class="card">
         <h3>สัดส่วนการออกค่าใช้จ่าย (ส่วนรวม)</h3>
@@ -65,10 +65,10 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
       </div>
     </section>
 
-    <!-- ยอดแต่ละคนถูกยุบมารวมไว้ที่ Dashboard และจัดเป็น 2 ฝั่ง ซ้าย-ขวา (ตามข้อ 3 และ 4) -->
+    <!-- สรุปภาพรวมยอดสุทธิรายบุคคล และข้อมูลเดิมแบบแยกซ้าย-ขวา -->
     <section class="card full">
       <h3>สรุปภาพรวมยอดสุทธิรายบุคคล</h3>
-      <div class="summarygrid" style="margin-bottom:16px">
+      <div class="summarygrid" style="margin-bottom:24px">
         <div class="card" style="background:#f8f9fe; border:1px solid var(--line); border-radius:12px; padding:16px;">
           <h4 style="margin:0 0 10px 0; color:var(--blue); font-size:16px;">👤 แก๊ป</h4>
           <div style="display:grid; gap:8px; font-size:13px;">
@@ -89,15 +89,29 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
         </div>
       </div>
 
-      <h3 style="margin-top:24px">สรุปยอดส่วนรวม — แยกตามผู้จ่ายและหมวดหมู่</h3>
+      <!-- นำข้อมูลยอดแต่ละคนเดิมมาใส่แบบแบ่งซ้ายขวา -->
       <div class="summarygrid">
-        <div><table class="miniTable"><thead><tr><th>ผู้จ่าย</th><th>จ่ายส่วนรวม</th><th>สัดส่วน</th></tr></thead><tbody id="sharedTable"></tbody></table></div>
-        <div><table class="miniTable"><thead><tr><th>หมวด</th><th>แก๊ป</th><th>แอม</th><th>รวม</th></tr></thead><tbody id="catTable"></tbody></table></div>
+        <section class="card" style="background:#f8f9fe; border:1px solid var(--line);">
+          <h3>ยอดทั้งหมดของ แก๊ป</h3>
+          <div style="margin:10px 0; font-size:13px; color:var(--muted); display:grid; gap:4px;">
+            <div>• รายจ่ายส่วนตัว: <b id="dashGapPersonalExp" style="color:var(--text)">฿0</b></div>
+            <div>• รายจ่ายส่วนรวม (ที่ออก): <b id="dashGapSharedExp" style="color:var(--text)">฿0</b></div>
+          </div>
+          <div class="tablewrap"><table><thead><tr><th>วันที่</th><th>รายการ</th><th>ประเภท</th><th>หมวด</th><th>ลักษณะ</th><th>จำนวน</th></tr></thead><tbody id="dashGapTable"></tbody></table></div>
+        </section>
+        <section class="card" style="background:#fff9fb; border:1px solid var(--line);">
+          <h3>ยอดทั้งหมดของ แอม</h3>
+          <div style="margin:10px 0; font-size:13px; color:var(--muted); display:grid; gap:4px;">
+            <div>• รายจ่ายส่วนตัว: <b id="dashAmpPersonalExp" style="color:var(--text)">฿0</b></div>
+            <div>• รายจ่ายส่วนรวม (ที่ออก): <b id="dashAmpSharedExp" style="color:var(--text)">฿0</b></div>
+          </div>
+          <div class="tablewrap"><table><thead><tr><th>วันที่</th><th>รายการ</th><th>ประเภท</th><th>หมวด</th><th>ลักษณะ</th><th>จำนวน</th></tr></thead><tbody id="dashAmpTable"></tbody></table></div>
+        </section>
       </div>
     </section>
   </div>
 
-  <!-- หน้ายอดส่วนรวม แบ่ง 2 ฝั่ง ซ้าย-ขวา (ตามข้อ 4) -->
+  <!-- หน้ายอดส่วนรวม แบ่ง 2 ฝั่ง ซ้าย-ขวา -->
   <div id="tab-shared-tab" class="tab-pane">
     <section class="card full">
       <h3>รายการและยอดรายรับ-รายจ่าย แบบ "ส่วนรวม"</h3>
@@ -114,7 +128,7 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
     </section>
   </div>
 
-  <!-- หน้ายอดส่วนตัว แบ่ง 2 ฝั่ง ซ้าย-ขวา (ตามข้อ 4) -->
+  <!-- หน้ายอดส่วนตัว แบ่ง 2 ฝั่ง ซ้าย-ขวา -->
   <div id="tab-personal-tab" class="tab-pane">
     <section class="card full">
       <h3>รายการและยอดรายรับ-รายจ่าย แบบ "ส่วนตัว"</h3>
@@ -131,7 +145,7 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
     </section>
   </div>
 
-  <!-- หน้ารายการทั้งหมด แบ่ง 2 ฝั่ง ซ้าย-ขวา (ตามข้อ 4) -->
+  <!-- หน้ารายการทั้งหมด แบ่ง 2 ฝั่ง ซ้าย-ขวา -->
   <div id="tab-all-tab" class="tab-pane">
     <section class="card full">
       <div class="toolbar"><h3 style="margin:10px 0">รายการทั้งหมดในเดือนนี้</h3><input id="search" placeholder="ค้นหารายการ / หมวดหมู่ / ผู้จ่าย..." oninput="render()"><button class="btn primary" onclick="openModal()">＋ เพิ่มรายการ</button></div>
@@ -223,7 +237,7 @@ function render(){
  incomeTotal.textContent = money(it); expenseTotal.textContent = money(et); netTotal.textContent = money(it - et);
  incomeCount.textContent = inc.length + ' รายการ'; expenseCount.textContent = exp.length + ' รายการ'; txCount.textContent = data.length;
  
- // กราฟและสัดส่วนส่วนรวม แสดงเปอร์เซ็นต์และยอดเงินของแต่ละคน (ตามข้อ 2)
+ // กราฟและสัดส่วนส่วนรวม แสดงเปอร์เซ็นต์และยอดเงินของแต่ละคน
  let a = exp.filter(x => x.scope === 'shared' && x.payer === 'แก๊ป').reduce((s, x) => s + x.amount, 0);
  let b = exp.filter(x => x.scope === 'shared' && x.payer === 'แอม').reduce((s, x) => s + x.amount, 0);
  let st = a + b || 1;
@@ -236,18 +250,19 @@ function render(){
  `;
  
  balance.innerHTML = personCard('แก๊ป', a, gapP, 'avb') + personCard('แอม', b, ampP, 'avp');
- sharedTable.innerHTML = `<tr><td><b>แก๊ป</b></td><td>${money(a)}</td><td>${gapP.toFixed(0)}%</td></tr><tr><td><b>แอม</b></td><td>${money(b)}</td><td>${ampP.toFixed(0)}%</td></tr><tr><td><b>รวม</b></td><td><b>${money(a + b)}</b></td><td>100%</td></tr>`;
- 
- let cats = {}; exp.filter(x => x.scope === 'shared').forEach(x => { cats[x.category] ??= {แก๊ป: 0, แอม: 0}; cats[x.category][x.payer] = (cats[x.category][x.payer] || 0) + x.amount });
- catTable.innerHTML = Object.entries(cats).map(([c, v]) => `<tr><td>${c}</td><td>${money(v.แก๊ป || 0)}</td><td>${money(v.แอม || 0)}</td><td>${money((v.แก๊ป || 0) + (v.แอม || 0))}</td></tr>`).join('') || '<tr><td colspan="4">ยังไม่มีรายการส่วนรวม</td></tr>';
 
- // คำนวณข้อมูลรายบุคคลสำหรับหน้า Dashboard (ข้อ 3)
+ // คำนวณข้อมูลรายบุคคลและแสดงตารางข้อมูลเดิมแยกฝั่งซ้าย-ขวาที่ Dashboard
  let gapData = data.filter(x => x.payer === 'แก๊ป');
  let ampData = data.filter(x => x.payer === 'แอม');
  let gInc = gapData.filter(x => x.type === 'income').reduce((s, x) => s + x.amount, 0);
  let gExp = gapData.filter(x => x.type === 'expense').reduce((s, x) => s + x.amount, 0);
+ let gPersExp = gapData.filter(x => x.type === 'expense' && x.scope === 'personal').reduce((s, x) => s + x.amount, 0);
+ let gSharedExp = gapData.filter(x => x.type === 'expense' && x.scope === 'shared').reduce((s, x) => s + x.amount, 0);
+
  let aInc = ampData.filter(x => x.type === 'income').reduce((s, x) => s + x.amount, 0);
  let aExp = ampData.filter(x => x.type === 'expense').reduce((s, x) => s + x.amount, 0);
+ let aPersExp = ampData.filter(x => x.type === 'expense' && x.scope === 'personal').reduce((s, x) => s + x.amount, 0);
+ let aSharedExp = ampData.filter(x => x.type === 'expense' && x.scope === 'shared').reduce((s, x) => s + x.amount, 0);
 
  document.getElementById('summaryGapInc').textContent = money(gInc);
  document.getElementById('summaryGapExp').textContent = money(gExp);
@@ -262,6 +277,14 @@ function render(){
  let elANet = document.getElementById('summaryAmpNet');
  elANet.textContent = money(aNet);
  elANet.className = aNet >= 0 ? 'green' : 'red';
+
+ document.getElementById('dashGapPersonalExp').textContent = money(gPersExp);
+ document.getElementById('dashGapSharedExp').textContent = money(gSharedExp);
+ document.getElementById('dashAmpPersonalExp').textContent = money(aPersExp);
+ document.getElementById('dashAmpSharedExp').textContent = money(aSharedExp);
+
+ dashGapTable.innerHTML = gapData.sort((a, b) => b.date.localeCompare(a.date)).map(x => `<tr><td>${formatDate(x.date)}</td><td><b>${x.title}</b></td><td><span class="tag ${x.type === 'income' ? 'income' : 'personal'}">${x.type === 'income' ? 'รายรับ' : 'รายจ่าย'}</span></td><td>${x.category}</td><td>${x.scope === 'shared' ? 'ส่วนรวม' : 'ส่วนตัว'}</td><td class="${x.type === 'income' ? 'green' : 'red'}">${x.type === 'income' ? '+' : '-'}${money(x.amount)}</td></tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">ไม่มีรายการ</td></tr>';
+ dashAmpTable.innerHTML = ampData.sort((a, b) => b.date.localeCompare(a.date)).map(x => `<tr><td>${formatDate(x.date)}</td><td><b>${x.title}</b></td><td><span class="tag ${x.type === 'income' ? 'income' : 'personal'}">${x.type === 'income' ? 'รายรับ' : 'รายจ่าย'}</span></td><td>${x.category}</td><td>${x.scope === 'shared' ? 'ส่วนรวม' : 'ส่วนตัว'}</td><td class="${x.type === 'income' ? 'green' : 'red'}">${x.type === 'income' ? '+' : '-'}${money(x.amount)}</td></tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">ไม่มีรายการ</td></tr>';
 
  // Shared Tab Tables (แบ่ง 2 ฝั่ง ซ้าย-ขวา)
  let sharedRows = data.filter(x => x.scope === 'shared').sort((a, b) => b.date.localeCompare(a.date));
