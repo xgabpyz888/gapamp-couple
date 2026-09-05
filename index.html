@@ -70,32 +70,32 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
       </div>
     </section>
 
-    <!-- สรุปภาพรวมยอดสุทธิรายบุคคล (ปรับสีสันแถวรายการให้ชัดเจน ไม่เหมือนช่องกรอกข้อมูล) -->
+    <!-- สรุปภาพรวมยอดสุทธิรายบุคคล (ปรับสีช่องและกรอบให้ชัดเจน ตรงกันทั้ง 2 ฝั่ง) -->
     <section class="card full">
       <h3>สรุปภาพรวมยอดสุทธิรายบุคคล</h3>
       <div class="summarygrid" style="margin-bottom:24px">
         
         <!-- การ์ดแก๊ป -->
-        <div class="card" style="background:#f4f7fe; border:1px solid #d5e0f2; border-radius:12px; padding:18px;">
+        <div class="card" style="background:#ffffff; border:1px solid #d5ddef; border-radius:12px; padding:18px; box-shadow:0 4px 15px rgba(0,0,0,0.03);">
           <h4 style="margin:0 0 14px 0; color:var(--blue); font-size:16px;">👤 แก๊ป</h4>
           <div style="display:grid; gap:8px; font-size:13px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; background:#e8f0fe; padding:10px 14px; border-radius:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#f4f7fe; border:1px solid #d2def6; padding:10px 14px; border-radius:8px;">
               <span style="color:#4a5568; font-weight:500;">รายรับ:</span>
               <b class="green" id="summaryGapInc">฿0</b>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; background:#eef4fd; padding:10px 14px; border-radius:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#f4f7fe; border:1px solid #d2def6; padding:10px 14px; border-radius:8px;">
               <span style="color:#4a5568; font-weight:500;">รายจ่ายส่วนตัว:</span>
               <b style="color:var(--blue)" id="dashGapPersonalExp">฿0</b>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; background:#f3effe; padding:10px 14px; border-radius:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#f4f7fe; border:1px solid #d2def6; padding:10px 14px; border-radius:8px;">
               <span style="color:#4a5568; font-weight:500;">รายจ่ายส่วนรวม:</span>
               <b style="color:var(--purple)" id="dashGapSharedExp">฿0</b>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; background:#fde8ec; padding:10px 14px; border-radius:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#f4f7fe; border:1px solid #d2def6; padding:10px 14px; border-radius:8px;">
               <span style="color:#4a5568; font-weight:600;">รายจ่ายรวมทั้งหมด:</span>
               <b class="red" id="summaryGapExp">฿0</b>
             </div>
-            <hr style="border:0; border-top:1px solid #d5e0f2; margin:4px 0;">
+            <hr style="border:0; border-top:1px solid #d5ddef; margin:4px 0;">
             <div style="display:flex; justify-content:space-between; align-items:center; font-size:15px; padding:4px 6px;">
               <span><b>คงเหลือสุทธิ (แก๊ป):</b></span>
               <b id="summaryGapNet" class="blue">฿0</b>
@@ -104,26 +104,26 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
         </div>
 
         <!-- การ์ดแอม -->
-        <div class="card" style="background:#fff4f8; border:1px solid #f7d6e6; border-radius:12px; padding:18px;">
+        <div class="card" style="background:#ffffff; border:1px solid #eed6e3; border-radius:12px; padding:18px; box-shadow:0 4px 15px rgba(0,0,0,0.03);">
           <h4 style="margin:0 0 14px 0; color:var(--pink); font-size:16px;">👤 แอม</h4>
           <div style="display:grid; gap:8px; font-size:13px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; background:#eafef0; padding:10px 14px; border-radius:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#fef4f8; border:1px solid #f2d0e2; padding:10px 14px; border-radius:8px;">
               <span style="color:#4a5568; font-weight:500;">รายรับ:</span>
               <b class="green" id="summaryAmpInc">฿0</b>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; background:#fdf2f8; padding:10px 14px; border-radius:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#fef4f8; border:1px solid #f2d0e2; padding:10px 14px; border-radius:8px;">
               <span style="color:#4a5568; font-weight:500;">รายจ่ายส่วนตัว:</span>
               <b style="color:var(--blue)" id="dashAmpPersonalExp">฿0</b>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; background:#f5effe; padding:10px 14px; border-radius:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#fef4f8; border:1px solid #f2d0e2; padding:10px 14px; border-radius:8px;">
               <span style="color:#4a5568; font-weight:500;">รายจ่ายส่วนรวม:</span>
               <b style="color:var(--purple)" id="dashAmpSharedExp">฿0</b>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; background:#ffe4ec; padding:10px 14px; border-radius:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#fef4f8; border:1px solid #f2d0e2; padding:10px 14px; border-radius:8px;">
               <span style="color:#4a5568; font-weight:600;">รายจ่ายรวมทั้งหมด:</span>
               <b class="red" id="summaryAmpExp">฿0</b>
             </div>
-            <hr style="border:0; border-top:1px solid #f7d6e6; margin:4px 0;">
+            <hr style="border:0; border-top:1px solid #eed6e3; margin:4px 0;">
             <div style="display:flex; justify-content:space-between; align-items:center; font-size:15px; padding:4px 6px;">
               <span><b>คงเหลือสุทธิ (แอม):</b></span>
               <b id="summaryAmpNet" class="blue">฿0</b>
@@ -158,7 +158,7 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
         </div>
         <div class="card" style="background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px;">
           <h4 style="margin:0 0 10px 0; color:var(--pink);">🩷 ส่วนรวมฝั่งแอม</h4>
-          <div class="tablewrap"><thead><tr><th>วันที่</th><th>รายการ</th><th>หมวด</th><th>จำนวน</th></tr></thead><tbody id="sharedAmpTable"></tbody></table></div>
+          <div class="tablewrap"><table><thead><tr><th>วันที่</th><th>รายการ</th><th>หมวด</th><th>จำนวน</th></tr></thead><tbody id="sharedAmpTable"></tbody></table></div>
         </div>
       </div>
     </section>
