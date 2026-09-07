@@ -21,6 +21,35 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
 .tab-pane{display:none}.tab-pane.active{display:block}
 @media(max-width:1000px){.app{grid-template-columns:1fr}.side{display:none}.main{padding:18px}.grid4{grid-template-columns:1fr 1fr}.content,.summarygrid{grid-template-columns:1fr}}
 @media(max-width:560px){.grid4{grid-template-columns:1fr}.top{align-items:flex-start;gap:12px;flex-direction:column}.controls{width:100%}.controls>*{flex:1}.formgrid{grid-template-columns:1fr}.field.fullw{grid-column:auto}}
+@media(max-width:560px){.grid4{grid-template-columns:1fr}.top{align-items:flex-start;gap:12px;flex-direction:column}.controls{width:100%}.controls>*{flex:1}.formgrid{grid-template-columns:1fr}.field.fullw{grid-column:auto}}
+
+/* สไตล์ปุ่มลอย (Floating Action Button) สำหรับมือถือ */
+.fab-btn {
+  display: none;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  background: var(--blue);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 28px;
+  box-shadow: 0 4px 12px rgba(79, 125, 243, 0.4);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+
+/* แสดงปุ่มเฉพาะหน้าจอขนาดเล็ก (มือถือ/แท็บเล็ต) ที่เมนูด้านข้างถูกซ่อน */
+@media(max-width: 1000px) {
+  .fab-btn {
+    display: flex;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -200,6 +229,9 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
 </main>
 </div>
 
+<!-- ปุ่มลอยสำหรับเพิ่มรายการบนมือถือ -->
+<button class="fab-btn" onclick="openModal('expense')">＋</button>
+  
 <div class="modal" id="modal"><div class="modalbox"><h2 style="margin-top:0" id="modalTitle">เพิ่มรายการ</h2>
 <form onsubmit="saveTx(event)">
 <input type="hidden" id="editId">
