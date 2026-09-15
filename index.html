@@ -96,14 +96,14 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
       </div>
     </section>
 
-    <!-- กราฟเพิ่มใหม่: สัดส่วน 100% แยกตามหมวดหมู่ (ส่วนตัว vs ส่วนรวม) และ TOP 5 รายจ่ายส่วนรวม -->
+    <!-- กราฟเพิ่มใหม่: สัดส่วนรายจ่ายส่วนรวมตามหมวดหมู่ และ TOP 5 หมวดหมู่ส่วนรวม -->
     <section class="content" style="grid-template-columns: 1fr 1fr;">
       <div class="card">
-        <h3>สัดส่วน 100% แยกตามหมวดหมู่ (ส่วนตัว / ส่วนรวม)</h3>
+        <h3>สัดส่วนรายจ่ายส่วนรวมตามหมวดหมู่ (รวม 100%)</h3>
         <div id="categoryBreakdownBars" style="display:grid; gap:12px; margin-top:8px;"></div>
       </div>
       <div class="card">
-        <h3>TOP 5 รายจ่ายส่วนรวมสูงสุด</h3>
+        <h3>TOP 5 หมวดหมู่ส่วนรวม</h3>
         <div id="top5SharedList" style="display:grid; gap:10px; margin-top:8px;"></div>
       </div>
     </section>
@@ -327,50 +327,44 @@ function render(){
  
  balance.innerHTML = personCard('แก๊ป', a, gapP, 'avb') + personCard('แอม', b, ampP, 'avp');
 
- // 1. กราฟ 100% แยกตามหมวดหมู่ (ส่วนตัว กับ ส่วนรวม)
- let categories = ['อาหาร', 'บ้าน', 'เดินทาง', 'ช้อปปิ้ง', 'บิล/สาธารณูปโภค', 'ท่องเที่ยว', 'สุขภาพ', 'สัตว์เลี้ยง', 'งาน', 'อื่นๆ'];
- let catHtml = '';
- let totalExpenseAll = exp.reduce((s, x) => s + x.amount, 0) || 1;
-
- categories.forEach(cat => {
-   let catItems = exp.filter(x => x.category === cat);
-   let catTotal = catItems.reduce((s, x) => s + x.amount, 0);
-   if(catTotal > 0){
-     let personalSum = catItems.filter(x => x.scope === 'personal').reduce((s, x) => s + x.amount, 0);
-     let sharedSum = catItems.filter(x => x.scope === 'shared').reduce((s, x) => s + x.amount, 0);
-     let pPerc = (personalSum / catTotal) * 100;
-     let sPerc = (sharedSum / catTotal) * 100;
-     let overallPerc = (catTotal / totalExpenseAll) * 100;
-
-     catHtml += `
-       <div style="font-size:12px;">
-         <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-           <span><b>${cat}</b> (${money(catTotal)} - ${overallPerc.toFixed(1)}%)</span>
-           <span style="color:var(--muted)">ส่วนตัว ${pPerc.toFixed(0)}% | ส่วนรวม ${sPerc.toFixed(0)}%</span>
-         </div>
-         <div style="height:10px; background:#eef1f6; border-radius:99px; overflow:hidden; display:flex;">
-           <div style="width:${pPerc}%; background:var(--blue);" title="ส่วนตัว: ${money(personalSum)}"></div>
-           <div style="width:${sPerc}%; background:var(--purple);" title="ส่วนรวม: ${money(sharedSum)}"></div>
-         </div>
+ // 1. รวมรายจ่ายส่วนรวมตามหมวดหมู่ เพื่อให้สัดส่วนรวมกันเป็น 100%
+ let sharedByCategory = exp.filter(x => x.scope === 'shared').reduce((groups, x) => {
+   groups[x.category] = (groups[x.category] || 0) + x.amount;
+   return groups;
+ }, {});
+ let sharedCategories = Object.entries(sharedByCategory).sort((a, b) => b[1] - a[1]);
+ let totalSharedExpense = sharedCategories.reduce((sum, [, amount]) => sum + amount, 0) || 1;
+ let categoryHtml = sharedCategories.map(([category, amount], index) => {
+   let percentage = (amount / totalSharedExpense) * 100;
+   let displayedPercentage = index === sharedCategories.length - 1
+     ? +(100 - sharedCategories.slice(0, index).reduce((sum, [, previousAmount]) => sum + Number(((previousAmount / totalSharedExpense) * 100).toFixed(1)), 0)).toFixed(1)
+     : +percentage.toFixed(1);
+   return `
+     <div style="font-size:12px;">
+       <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+         <span><b>${category}</b> (${money(amount)})</span>
+         <span style="color:var(--muted)">${displayedPercentage.toFixed(1)}%</span>
        </div>
-     `;
-   }
- });
- document.getElementById('categoryBreakdownBars').innerHTML = catHtml || '<div style="color:var(--muted);text-align:center;padding:20px;">ไม่มีข้อมูลรายจ่ายในเดือนนี้</div>';
+       <div style="height:10px; background:#eef1f6; border-radius:99px; overflow:hidden;">
+         <div style="width:${displayedPercentage}%; height:100%; background:var(--purple); border-radius:99px;" title="${category}: ${money(amount)} (${displayedPercentage.toFixed(1)}%)"></div>
+       </div>
+     </div>
+   `;
+ }).join('');
+ document.getElementById('categoryBreakdownBars').innerHTML = categoryHtml || '<div style="color:var(--muted);text-align:center;padding:20px;">ไม่มีข้อมูลรายจ่ายส่วนรวมในเดือนนี้</div>';
 
- // 2. แสดง TOP 5 ของรายจ่ายส่วนรวม (ระบุ แก๊ป หรือ แอม)
- let sharedExpenses = exp.filter(x => x.scope === 'shared').sort((a, b) => b.amount - a.amount).slice(0, 5);
- let top5Html = sharedExpenses.map((x, index) => `
+ // 2. แสดง TOP 5 หมวดหมู่ของรายจ่ายส่วนรวม
+ let top5Categories = sharedCategories.slice(0, 5);
+ let top5Html = top5Categories.map(([category, amount], index) => `
    <div style="display:flex; justify-content:space-between; align-items:center; background:#f8f9fe; border:1px solid var(--line); padding:10px 12px; border-radius:8px; font-size:13px;">
      <div>
        <span style="font-weight:bold; color:var(--muted); margin-right:6px;">#${index + 1}</span>
-       <b>${x.title}</b> <span style="font-size:11px; color:var(--muted);">(${x.category})</span>
-       <div style="font-size:11px; color:${x.payer === 'แก๊ป' ? 'var(--blue)' : 'var(--pink)'}; font-weight:600; margin-top:2px;">ผู้จ่าย: ${x.payer}</div>
+       <b>${category}</b>
      </div>
-     <div style="font-weight:800; color:var(--red);">${money(x.amount)}</div>
+     <div style="font-weight:800; color:var(--red);">${money(amount)}</div>
    </div>
  `).join('');
- document.getElementById('top5SharedList').innerHTML = top5Html || '<div style="color:var(--muted);text-align:center;padding:20px;">ไม่มีรายการรายจ่ายส่วนรวม</div>';
+ document.getElementById('top5SharedList').innerHTML = top5Html || '<div style="color:var(--muted);text-align:center;padding:20px;">ไม่มีข้อมูลรายจ่ายส่วนรวมในเดือนนี้</div>';
 
  // คำนวณข้อมูลรายบุคคลและแสดงในกล่องสรุปภาพรวม
  let gapData = data.filter(x => x.payer === 'แก๊ป');
