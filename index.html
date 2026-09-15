@@ -21,7 +21,6 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
 .tab-pane{display:none}.tab-pane.active{display:block}
 @media(max-width:1000px){.app{grid-template-columns:1fr}.side{display:none}.main{padding:18px}.grid4{grid-template-columns:1fr 1fr}.content,.summarygrid{grid-template-columns:1fr}}
 @media(max-width:560px){.grid4{grid-template-columns:1fr}.top{align-items:flex-start;gap:12px;flex-direction:column}.controls{width:100%}.controls>*{flex:1}.formgrid{grid-template-columns:1fr}.field.fullw{grid-column:auto}}
-@media(max-width:560px){.grid4{grid-template-columns:1fr}.top{align-items:flex-start;gap:12px;flex-direction:column}.controls{width:100%}.controls>*{flex:1}.formgrid{grid-template-columns:1fr}.field.fullw{grid-column:auto}}
 
 /* สไตล์ปุ่มลอย (Floating Action Button) สำหรับมือถือ */
 .fab-btn {
@@ -43,13 +42,11 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
   cursor: pointer;
 }
 
-/* แสดงปุ่มเฉพาะหน้าจอขนาดเล็ก (มือถือ/แท็บเล็ต) ที่เมนูด้านข้างถูกซ่อน */
 @media(max-width: 1000px) {
   .fab-btn {
     display: flex;
   }
 }
-
 </style>
 </head>
 <body>
@@ -99,7 +96,19 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
       </div>
     </section>
 
-    <!-- สรุปภาพรวมยอดสุทธิรายบุคคล (ปรับสีช่องและกรอบให้ชัดเจน ตรงกันทั้ง 2 ฝั่ง) -->
+    <!-- กราฟเพิ่มใหม่: สัดส่วน 100% แยกตามหมวดหมู่ (ส่วนตัว vs ส่วนรวม) และ TOP 5 รายจ่ายส่วนรวม -->
+    <section class="content" style="grid-template-columns: 1fr 1fr;">
+      <div class="card">
+        <h3>สัดส่วน 100% แยกตามหมวดหมู่ (ส่วนตัว / ส่วนรวม)</h3>
+        <div id="categoryBreakdownBars" style="display:grid; gap:12px; margin-top:8px;"></div>
+      </div>
+      <div class="card">
+        <h3>TOP 5 รายจ่ายส่วนรวมสูงสุด</h3>
+        <div id="top5SharedList" style="display:grid; gap:10px; margin-top:8px;"></div>
+      </div>
+    </section>
+
+    <!-- สรุปภาพรวมยอดสุทธิรายบุคคล -->
     <section class="card full">
       <h3>สรุปภาพรวมยอดสุทธิรายบุคคล</h3>
       <div class="summarygrid" style="margin-bottom:24px">
@@ -176,7 +185,7 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
     </section>
   </div>
 
-  <!-- หน้ายอดส่วนรวม แบ่ง 2 ฝั่ง ซ้าย-ขวา -->
+  <!-- หน้ายอดส่วนรวม -->
   <div id="tab-shared-tab" class="tab-pane">
     <section class="card full">
       <h3>รายการและยอดรายรับ-รายจ่าย แบบ "ส่วนรวม"</h3>
@@ -193,7 +202,7 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
     </section>
   </div>
 
-  <!-- หน้ายอดส่วนตัว แบ่ง 2 ฝั่ง ซ้าย-ขวา -->
+  <!-- หน้ายอดส่วนตัว -->
   <div id="tab-personal-tab" class="tab-pane">
     <section class="card full">
       <h3>รายการและยอดรายรับ-รายจ่าย แบบ "ส่วนตัว"</h3>
@@ -210,7 +219,7 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
     </section>
   </div>
 
-  <!-- หน้ารายการทั้งหมด แบ่ง 2 ฝั่ง ซ้าย-ขวา -->
+  <!-- หน้ารายการทั้งหมด -->
   <div id="tab-all-tab" class="tab-pane">
     <section class="card full">
       <div class="toolbar"><h3 style="margin:10px 0">รายการทั้งหมดในเดือนนี้</h3><input id="search" placeholder="ค้นหารายการ / หมวดหมู่ / ผู้จ่าย..." oninput="render()"><button class="btn primary" onclick="openModal()">＋ เพิ่มรายการ</button></div>
@@ -240,14 +249,13 @@ button,input,select{font:inherit}button{cursor:pointer;border:0}
 <div class="field"><label>วันที่</label><input id="date" type="date" required></div>
 <div class="field fullw"><label>รายการ</label><input id="title" required placeholder="เช่น ค่าอาหาร, เงินเดือน"></div>
 <div class="field"><label>จำนวนเงิน (บาท)</label><input id="amount" type="number" min="0" step="0.01" required></div>
-<div class="field"><label>หมวดหมู่</label><select id="category"><option>อาหาร</option><option>บ้าน</option><option>เดินทาง</option><option>ช้อปปิ้ง</option><option>บิล/สาธารณูปโภค</option><option>ท่องเที่ยว</option><option>สุขภาพ</option><option>งาน</option><option>อื่นๆ</option></select></div>
+<div class="field"><label>หมวดหมู่</label><select id="category"><option>อาหาร</option><option>บ้าน</option><option>เดินทาง</option><option>ช้อปปิ้ง</option><option>บิล/สาธารณูปโภค</option><option>ท่องเที่ยว</option><option>สุขภาพ</option><option>สัตว์เลี้ยง</option><option>งาน</option><option>อื่นๆ</option></select></div>
 <div class="field"><label>ผู้จ่าย / ผู้รับ</label><select id="payer"><option value="แก๊ป">แก๊ป</option><option value="แอม">แอม</option></select></div>
 <div class="field"><label>ลักษณะค่าใช้จ่าย</label><select id="scope"><option value="shared">ส่วนรวม</option><option value="personal">ส่วนตัว</option></select></div>
 </div><div class="modalactions"><button type="button" class="btn" onclick="closeModal()">ยกเลิก</button><button class="btn primary" id="saveBtnText">บันทึก</button></div></form>
 </div></div>
 
 <script>
-// ตั้งค่า Supabase
 const SUPABASE_URL = 'https://wjefzbbncmliwgmllezy.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqZWZ6YmJuY21saXdnbWxsZXp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2MjEyODksImV4cCI6MjEwNDE5NzI4OX0.EIP_xGqMGT81XHAOMw_ODej3LuBlbQAA4LboKXBMG_M';
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -318,6 +326,51 @@ function render(){
  `;
  
  balance.innerHTML = personCard('แก๊ป', a, gapP, 'avb') + personCard('แอม', b, ampP, 'avp');
+
+ // 1. กราฟ 100% แยกตามหมวดหมู่ (ส่วนตัว กับ ส่วนรวม)
+ let categories = ['อาหาร', 'บ้าน', 'เดินทาง', 'ช้อปปิ้ง', 'บิล/สาธารณูปโภค', 'ท่องเที่ยว', 'สุขภาพ', 'สัตว์เลี้ยง', 'งาน', 'อื่นๆ'];
+ let catHtml = '';
+ let totalExpenseAll = exp.reduce((s, x) => s + x.amount, 0) || 1;
+
+ categories.forEach(cat => {
+   let catItems = exp.filter(x => x.category === cat);
+   let catTotal = catItems.reduce((s, x) => s + x.amount, 0);
+   if(catTotal > 0){
+     let personalSum = catItems.filter(x => x.scope === 'personal').reduce((s, x) => s + x.amount, 0);
+     let sharedSum = catItems.filter(x => x.scope === 'shared').reduce((s, x) => s + x.amount, 0);
+     let pPerc = (personalSum / catTotal) * 100;
+     let sPerc = (sharedSum / catTotal) * 100;
+     let overallPerc = (catTotal / totalExpenseAll) * 100;
+
+     catHtml += `
+       <div style="font-size:12px;">
+         <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+           <span><b>${cat}</b> (${money(catTotal)} - ${overallPerc.toFixed(1)}%)</span>
+           <span style="color:var(--muted)">ส่วนตัว ${pPerc.toFixed(0)}% | ส่วนรวม ${sPerc.toFixed(0)}%</span>
+         </div>
+         <div style="height:10px; background:#eef1f6; border-radius:99px; overflow:hidden; display:flex;">
+           <div style="width:${pPerc}%; background:var(--blue);" title="ส่วนตัว: ${money(personalSum)}"></div>
+           <div style="width:${sPerc}%; background:var(--purple);" title="ส่วนรวม: ${money(sharedSum)}"></div>
+         </div>
+       </div>
+     `;
+   }
+ });
+ document.getElementById('categoryBreakdownBars').innerHTML = catHtml || '<div style="color:var(--muted);text-align:center;padding:20px;">ไม่มีข้อมูลรายจ่ายในเดือนนี้</div>';
+
+ // 2. แสดง TOP 5 ของรายจ่ายส่วนรวม (ระบุ แก๊ป หรือ แอม)
+ let sharedExpenses = exp.filter(x => x.scope === 'shared').sort((a, b) => b.amount - a.amount).slice(0, 5);
+ let top5Html = sharedExpenses.map((x, index) => `
+   <div style="display:flex; justify-content:space-between; align-items:center; background:#f8f9fe; border:1px solid var(--line); padding:10px 12px; border-radius:8px; font-size:13px;">
+     <div>
+       <span style="font-weight:bold; color:var(--muted); margin-right:6px;">#${index + 1}</span>
+       <b>${x.title}</b> <span style="font-size:11px; color:var(--muted);">(${x.category})</span>
+       <div style="font-size:11px; color:${x.payer === 'แก๊ป' ? 'var(--blue)' : 'var(--pink)'}; font-weight:600; margin-top:2px;">ผู้จ่าย: ${x.payer}</div>
+     </div>
+     <div style="font-weight:800; color:var(--red);">${money(x.amount)}</div>
+   </div>
+ `).join('');
+ document.getElementById('top5SharedList').innerHTML = top5Html || '<div style="color:var(--muted);text-align:center;padding:20px;">ไม่มีรายการรายจ่ายส่วนรวม</div>';
 
  // คำนวณข้อมูลรายบุคคลและแสดงในกล่องสรุปภาพรวม
  let gapData = data.filter(x => x.payer === 'แก๊ป');
